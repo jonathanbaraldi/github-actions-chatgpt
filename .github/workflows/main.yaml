@@ -5,7 +5,7 @@ on:
 jobs:
   hello_world_job: # Define the job
     runs-on: ubuntu-latest # Specify the runner to run the job on
-    name: ChatGPT explain code # Job name
+    name: ChatGPT comenta o código # Job name
     steps:
       - name: ChatGPT explain code # Step name
         uses: jonathanbaraldi/github-actions-chatgpt@main # Use the ChatGPT Github Actions from cirolini repository

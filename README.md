@@ -1,4 +1,4 @@
-# Code Review with ChatGPT
+# Pipeline with ChatGPT
 
 This project aims to automate code review using the ChatGPT language model. It integrates  with Github Actions, and upon receiving a Pull Request, it automatically sends each code review to ChatGPT for an explanation.
 
