@@ -81,13 +81,18 @@ for commit in commits:
         modified_content = content + b"\n" + comment.encode()
 
 
+        repo.create_file(filename, "Adding comments to the code, by Jon", modified_content)
+
+
         # Update the file in the repository
-        repo.create_file(
-            path=filename,
-            message="Adding comments to the code, by Jon",
-            content=modified_content,
-            branch='chatgpt'
-        )
+        # repo.create_file(
+        #     path=filename,
+        #     message="Adding comments to the code, by Jon",
+        #     content=modified_content,
+        #     branch='chatgpt'
+        # )
+
+        #/ Invalid request.\n\n\"sha\" wasn't supplied."
 
 # Set up the model and prompt
 # model_engine = "text-davinci-003"
