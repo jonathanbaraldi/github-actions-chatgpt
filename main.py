@@ -26,12 +26,57 @@ g = Github(args.github_token)
 ## Selecting the repository
 repo = g.get_repo(os.getenv('GITHUB_REPOSITORY'))
 
+
+
 ## Get pull request
 pull_request = repo.get_pull(int(args.github_pr_id))
+
+
 
 ## Loop through the commits in the pull request
 commits = pull_request.get_commits()
 
+
+for commit in commits:
+    
+    # Getting the modified files in the commit
+    files = commit.files
+    
+    for file in files:
+
+        # Getting the file name and content
+        filename = file.filename
+
+        content = repo.get_contents(filename, ref=commit.sha).decoded_content
+
+
+        print(content)
+
+
+        # Sending the code to ChatGPT
+        response = openai.Completion.create(
+            engine=args.openai_engine,
+            prompt=(f"Can you please add some comments to the following code if there no one? \n```{content}```"),
+            temperature=float(args.openai_temperature),
+            max_tokens=int(args.openai_max_tokens)
+        )
+
+
+        # Adding a comment to the pull request with ChatGPT's response
+        pull_request.create_issue_comment(f"ChatGPT's response about `{file.filename}`:\n {response['choices'][0]['text']}")
+
+
+        # Add the comment to the file
+        comment = response['choices'][0]['text']
+        modified_content = content + "\n" + comment
+
+        # Update the file in the repository
+        repo.create_file(
+            path=filename,
+            message="Adding comments to the code, by Jon",
+            content=modified_content,
+            branch=commit.sha
+        )
 
 # Set up the model and prompt
 # model_engine = "text-davinci-003"
@@ -54,23 +99,4 @@ commits = pull_request.get_commits()
 
 
 
-for commit in commits:
-    
-    # Getting the modified files in the commit
-    files = commit.files
-    
-    for file in files:
-        # Getting the file name and content
-        filename = file.filename
-        content = repo.get_contents(filename, ref=commit.sha).decoded_content
 
-        # Sending the code to ChatGPT
-        response = openai.Completion.create(
-            engine=args.openai_engine,
-            prompt=(f"Can you please add some comments to the following code if there no one? \n```{content}```"),
-            temperature=float(args.openai_temperature),
-            max_tokens=int(args.openai_max_tokens)
-        )
-
-        # Adding a comment to the pull request with ChatGPT's response
-        pull_request.create_issue_comment(f"ChatGPT's response about `{file.filename}`:\n {response['choices'][0]['text']}")
