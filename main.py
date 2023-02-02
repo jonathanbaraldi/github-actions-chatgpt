@@ -58,6 +58,8 @@ for commit in commits:
         # Getting the file name and content
         filename = file.filename
 
+
+
         content = repo.get_contents(filename, ref=commit.sha).decoded_content
 
         print(content)
@@ -80,7 +82,7 @@ for commit in commits:
         comment = response['choices'][0]['text']
         modified_content = content + b"\n" + comment.encode()
 
-        repo.update_file(filename, "Adding comments to the code, by Jon", modified_content)
+        repo.update_file(filename, "Adding comments to the code, by Jon", modified_content, file.sha)
 
 
         # Update the file in the repository
