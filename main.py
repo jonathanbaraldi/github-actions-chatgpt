@@ -81,10 +81,11 @@ for commit in commits:
         # repo.create_file(filename+".chatgpt", "Adding comments to the code, by Jon", modified_content, file.sha, "chagpt")
 
         # Update the file in the repository
-        repo.create_file(
-            path=filename+".chatgpt",
+        repo.update_file(
+            path=filename,
             message="Adding comments to the code, by Jon",
-            content=comment,
+            content=modified_content,
+            file.sha,
             branch='chatgpt'
         )
 
