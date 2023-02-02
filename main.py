@@ -59,10 +59,12 @@ for commit in commits:
 
         print(content)
 
+        
+
         # Sending the code to ChatGPT
         response = openai.Completion.create(
             engine=args.openai_engine,
-            prompt=("Can you please add some comments to the code? "+content),
+            prompt=("Can you please add some comments to the code? "+content + b"\n"),
             temperature=float(args.openai_temperature),
             max_tokens=int(args.openai_max_tokens)
         )
