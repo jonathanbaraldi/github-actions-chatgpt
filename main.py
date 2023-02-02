@@ -49,9 +49,7 @@ for commit in commits:
 
         content = repo.get_contents(filename, ref=commit.sha).decoded_content
 
-
         print(content)
-
 
         # Sending the code to ChatGPT
         response = openai.Completion.create(
@@ -63,12 +61,14 @@ for commit in commits:
 
 
         # Adding a comment to the pull request with ChatGPT's response
-        pull_request.create_issue_comment(f"ChatGPT's response about `{file.filename}`:\n {response['choices'][0]['text']}")
+        # pull_request.create_issue_comment(f"ChatGPT's response about `{file.filename}`:\n {response['choices'][0]['text']}")
+
 
 
         # Add the comment to the file
         comment = response['choices'][0]['text']
-        modified_content = content + "\n" + comment
+        modified_content = content + b"\n" + comment.encode()
+
 
         # Update the file in the repository
         repo.create_file(
