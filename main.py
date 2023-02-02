@@ -80,8 +80,7 @@ for commit in commits:
         comment = response['choices'][0]['text']
         modified_content = content + b"\n" + comment.encode()
 
-
-        repo.create_file(filename, "Adding comments to the code, by Jon", modified_content)
+        repo.update_file(filename, "Adding comments to the code, by Jon", modified_content)
 
 
         # Update the file in the repository
