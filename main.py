@@ -39,6 +39,10 @@ commits = pull_request.get_commits()
 
 for commit in commits:
     
+
+    print(commit.sha)
+    
+
     # Getting the modified files in the commit
     files = commit.files
     
@@ -75,7 +79,7 @@ for commit in commits:
             path=filename,
             message="Adding comments to the code, by Jon",
             content=modified_content,
-            branch=commit.sha
+            branch=pull_request.head_branch
         )
 
 # Set up the model and prompt
