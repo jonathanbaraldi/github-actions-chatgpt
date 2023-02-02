@@ -59,12 +59,10 @@ for commit in commits:
 
         print(content)
 
-        
-
         # Sending the code to ChatGPT
         response = openai.Completion.create(
             engine=args.openai_engine,
-            prompt=("Can you please add some comments to the code? "+content + b"\n"),
+            prompt=(f"Can you please add some comments to the following code if there no one? \n```{content}```"),
             temperature=float(args.openai_temperature),
             max_tokens=int(args.openai_max_tokens)
         )
@@ -79,17 +77,13 @@ for commit in commits:
         modified_content = content + b"\n" + comment.encode()
 
 
-        print(comment)
-
-
         # update
-        repo.update_file(filename, comment, content, file.sha)
+        repo.update_file(filename, comment.encode(), content, file.sha)
         # repo.update_file(filename, "Adding comments to the code, by Jon", modified_content, file.sha)
 
         # repo.create_file(filename+".chatgpt", "Adding comments to the code, by Jon", modified_content, file.sha, "chagpt")
 
         # Update the file in the repository
-
 
         #/ Invalid request.\n\n\"sha\" wasn't supplied."
 
