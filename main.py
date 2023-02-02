@@ -78,15 +78,15 @@ for commit in commits:
 
         # repo.update_file(filename, "Adding comments to the code, by Jon", modified_content, file.sha)
 
-        repo.create_file(filename+".chatgpt", "Adding comments to the code, by Jon", modified_content, file.sha, "chagpt")
+        # repo.create_file(filename+".chatgpt", "Adding comments to the code, by Jon", modified_content, file.sha, "chagpt")
 
         # Update the file in the repository
-        #repo.create_file(
-        #    path=filename+".chatgpt",
-        #    message="Adding comments to the code, by Jon",
-        #    content=modified_content,
-        #    branch='chatgpt'
-        #)
+        repo.create_file(
+            path=filename+".chatgpt",
+            message="Adding comments to the code, by Jon",
+            content=comment,
+            branch='chatgpt'
+        )
 
         #/ Invalid request.\n\n\"sha\" wasn't supplied."
 
