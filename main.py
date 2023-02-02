@@ -78,7 +78,7 @@ for commit in commits:
 
         # repo.update_file(filename, "Adding comments to the code, by Jon", modified_content, file.sha)
 
-        repo.create_file(filename+".chatgpt", "Adding comments to the code, by Jon", modified_content, file.sha)
+        repo.create_file(filename+".chatgpt", "Adding comments to the code, by Jon", modified_content, file.sha, "chagpt")
 
         # Update the file in the repository
         #repo.create_file(
