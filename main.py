@@ -34,45 +34,43 @@ commits = pull_request.get_commits()
 
 
 # Set up the model and prompt
-model_engine = "text-davinci-003"
-
-prompt = "Hello, how are you today?"
-
-print('Jon: '+prompt)
+# model_engine = "text-davinci-003"
+# prompt = "Hello, how are you today?"
+# print('Jon: '+prompt)
 
 # Generate a response
-completion = openai.Completion.create(
-    engine=model_engine,
-    prompt=prompt,
-    max_tokens=1024,
-    n=1,
-    stop=None,
-    temperature=0.5,
-)
+# completion = openai.Completion.create(
+#     engine=model_engine,
+#     prompt=prompt,
+#     max_tokens=1024,
+#     n=1,
+#     stop=None,
+#     temperature=0.5,
+# )
+# 
+# response = completion.choices[0].text
+# 
+# print('Chat: '+response)
 
-response = completion.choices[0].text
-
-print('Chat: '+response)
 
 
+for commit in commits:
+    
+    # Getting the modified files in the commit
+    files = commit.files
+    
+    for file in files:
+        # Getting the file name and content
+        filename = file.filename
+        content = repo.get_contents(filename, ref=commit.sha).decoded_content
 
-#for commit in commits:
-#    
-#    # Getting the modified files in the commit
-#    files = commit.files
-#    
-#    for file in files:
-#        # Getting the file name and content
-#        filename = file.filename
-#        content = repo.get_contents(filename, ref=commit.sha).decoded_content
-#
-#        # Sending the code to ChatGPT
-#        response = openai.Completion.create(
-#            engine=args.openai_engine,
-#            prompt=(f"Comment Code:\n```{content}```"),
-#            temperature=float(args.openai_temperature),
-#            max_tokens=int(args.openai_max_tokens)
-#        )
-#
-#        # Adding a comment to the pull request with ChatGPT's response
-#        pull_request.create_issue_comment(f"ChatGPT's response about `{file.filename}`:\n {response['choices'][0]['text']}")
+        # Sending the code to ChatGPT
+        response = openai.Completion.create(
+            engine=args.openai_engine,
+            prompt=(f"Can you please add some comments to the following code if there no one? \n```{content}```"),
+            temperature=float(args.openai_temperature),
+            max_tokens=int(args.openai_max_tokens)
+        )
+
+        # Adding a comment to the pull request with ChatGPT's response
+        pull_request.create_issue_comment(f"ChatGPT's response about `{file.filename}`:\n {response['choices'][0]['text']}")
