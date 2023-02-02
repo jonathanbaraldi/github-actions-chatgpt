@@ -86,7 +86,7 @@ for commit in commits:
             path=filename,
             message="Adding comments to the code, by Jon",
             content=modified_content,
-            branch=pull_request_base_ref
+            branch='chatgpt'
         )
 
 # Set up the model and prompt
