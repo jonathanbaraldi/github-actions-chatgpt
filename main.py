@@ -62,7 +62,7 @@ for commit in commits:
         # Sending the code to ChatGPT
         response = openai.Completion.create(
             engine=args.openai_engine,
-            prompt=(f"Can you please add some comments to the following code if there no one? \n```{content}```"),
+            prompt=("Can you please add some comments to the code? "+content),
             temperature=float(args.openai_temperature),
             max_tokens=int(args.openai_max_tokens)
         )
@@ -75,6 +75,9 @@ for commit in commits:
         # Add the comment to the file
         comment = response['choices'][0]['text']
         modified_content = content + b"\n" + comment.encode()
+
+
+        print(comment)
 
 
         # update
