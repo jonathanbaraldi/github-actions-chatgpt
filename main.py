@@ -13,8 +13,6 @@ parser.add_argument('--openai_api_key', help='Your OpenAI API Key')
 parser.add_argument('--github_token', help='Your Github Token')
 parser.add_argument('--github_pr_id', help='Your Github PR ID')
 
-parser.add_argument('--pull_request_base_ref', help='Pull Request Base Ref')
-
 parser.add_argument('--openai_engine', default="text-davinci-002", help='GPT-3 model to use. Options: text-davinci-002, text-babbage-001, text-curie-001, text-ada-001')
 parser.add_argument('--openai_temperature', default=0.5, help='Sampling temperature to use. Higher values means the model will take more risks. Recommended: 0.5')
 parser.add_argument('--openai_max_tokens', default=2048, help='The maximum number of tokens to generate in the completion.')
@@ -22,9 +20,6 @@ args = parser.parse_args()
 
 ## Authenticating with the OpenAI API
 openai.api_key = args.openai_api_key
-
-
-pull_request_base_ref = args.pull_request_base_ref
 
 
 ## Authenticating with the Github API
