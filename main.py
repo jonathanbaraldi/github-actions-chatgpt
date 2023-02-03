@@ -28,18 +28,14 @@ args = parser.parse_args()
 
 ## Authenticating with the OpenAI API
 openai.api_key = args.openai_api_key
-#openai.api_key = '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'
 
 ## Authenticating with the Github API
 g = Github(args.github_token)
-# g = Github('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')
 
 
 ## Selecting the repository
 repo = g.get_repo(os.getenv('GITHUB_REPOSITORY'))
 # repo = g.get_user().get_repo("nodejs-chatgpt")
-
-
 
 
 ## Get pull request
@@ -102,9 +98,6 @@ for commit in commits:
         print(file.sha)   
         print(commit.sha)
 
-        #repo.update_file("/your_file.txt", "your_commit_message", "your_new_file_content", file.sha)
-
-
         sha = repo.get_contents(filename).sha
         
         print(sha)
@@ -118,43 +111,6 @@ for commit in commits:
             sha = repo.get_contents(filename, ref=commit.sha).sha, 
             branch = 'chatgpt'
         )
-
-
-
-
-        # update
-        # repo.update_file(filename, comment, content, commit.sha , branch='chatgpt')
-
-
-
-
-        #repo.update_file(contents.path, message, content, contents.sha, branch=branch, author=author)  # Add, commit and push branch
-        # repo.update_file(filename, "Adding comments to the code, by Jon", modified_content, file.sha)
-
-        # repo.create_file(filename+".chatgpt", "Adding comments to the code, by Jon", modified_content, file.sha, "chagpt")
-
-        # Update the file in the repository
-
-        #/ Invalid request.\n\n\"sha\" wasn't supplied."
-
-# Set up the model and prompt
-# model_engine = "text-davinci-003"
-# prompt = "Hello, how are you today?"
-# print('Jon: '+prompt)
-
-# Generate a response
-# completion = openai.Completion.create(
-#     engine=model_engine,
-#     prompt=prompt,
-#     max_tokens=1024,
-#     n=1,
-#     stop=None,
-#     temperature=0.5,
-# )
-# 
-# response = completion.choices[0].text
-# 
-# print('Chat: '+response)
 
 
 
