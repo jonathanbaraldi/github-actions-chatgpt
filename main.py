@@ -86,28 +86,34 @@ for commit in commits:
 
 
 
-        # Sending the code to ChatGPT
+        # Comments about the code
         response1 = openai.Completion.create(
             engine=args.openai_engine,
-            prompt=("Can you please add some comments to the following code?"+content),
+            prompt=("Can you please add some comments to the following code? "+content),
             temperature=float(args.openai_temperature),
             max_tokens=int(args.openai_max_tokens)
         )
 
+
+        # Improve the code about security and best practices
         response2 = openai.Completion.create(
             engine=args.openai_engine,
-            prompt=("What can be improved in the following code about security and best practices?"+content),
+            prompt=("Improved and evolve the following code using security and best practices: "+content),
             temperature=float(args.openai_temperature),
             max_tokens=int(args.openai_max_tokens)
         )
+
+
 
         # Adding a comment to the pull request with ChatGPT's response
         pull_request.create_issue_comment(f"ChatGPT's comments about `{file.filename}`:\n {response1['choices'][0]['text']}")
 
         pull_request.create_issue_comment(f"ChatGPT's security e best practices about `{file.filename}`:\n {response2['choices'][0]['text']}")
-
         # Add the comment to the file
         
+
+
+
         #comment = response['choices'][0]['text']
         #print(comment)
         #print(filename)
