@@ -43,7 +43,7 @@ repo = g.get_repo(os.getenv('GITHUB_REPOSITORY'))
 
 
 ## Get pull request
-pull_request = repo.get_pull(int('11'))
+pull_request = repo.get_pull(int(args.github_pr_id))
 
 
 ## Loop through the commits in the pull request
