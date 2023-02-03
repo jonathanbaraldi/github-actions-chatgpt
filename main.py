@@ -7,6 +7,13 @@ import openai
 import os
 from github import Github
 
+import git 
+
+# pip3 install GitPython
+
+import base64
+  
+
 ## Adding command-line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--openai_api_key', help='Your OpenAI API Key')
@@ -18,21 +25,25 @@ parser.add_argument('--openai_temperature', default=0.5, help='Sampling temperat
 parser.add_argument('--openai_max_tokens', default=2048, help='The maximum number of tokens to generate in the completion.')
 args = parser.parse_args()
 
+
 ## Authenticating with the OpenAI API
 openai.api_key = args.openai_api_key
-
+#openai.api_key = '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'
 
 ## Authenticating with the Github API
 g = Github(args.github_token)
+# g = Github('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')
+
 
 ## Selecting the repository
 repo = g.get_repo(os.getenv('GITHUB_REPOSITORY'))
+# repo = g.get_user().get_repo("nodejs-chatgpt")
+
 
 
 
 ## Get pull request
-pull_request = repo.get_pull(int(args.github_pr_id))
-
+pull_request = repo.get_pull(int('11'))
 
 
 ## Loop through the commits in the pull request
@@ -42,22 +53,33 @@ commits = pull_request.get_commits()
 for commit in commits:
     
 
+
     print(commit.sha)
+
 
 
     # Getting the modified files in the commit
     files = commit.files
+
     
+
+
     for file in files:
 
         # Getting the file name and content
         filename = file.filename
 
+        content = repo.get_contents(filename, ref=commit.sha).decoded_content.decode("utf-8")
+
+        content2 = repo.get_contents(filename, ref=commit.sha).decoded_content
 
 
-        content = repo.get_contents(filename, ref=commit.sha).decoded_content
+
+        # content = repo.get_file_contents(filename)
 
         print(content)
+
+
 
         # Sending the code to ChatGPT
         response = openai.Completion.create(
@@ -74,11 +96,39 @@ for commit in commits:
 
         # Add the comment to the file
         comment = response['choices'][0]['text']
-        modified_content = content + b"\n" + comment.encode()
+
+        print(comment)
+        print(filename)
+        print(file.sha)   
+        print(commit.sha)
+
+        #repo.update_file("/your_file.txt", "your_commit_message", "your_new_file_content", file.sha)
+
+
+        sha = repo.get_contents(filename).sha
+        
+        print(sha)
+
+        repo.update_file(
+            path = filename, 
+            message = comment, 
+            content = repo.get_contents(filename, ref=commit.sha).decoded_content.decode("utf-8"), 
+            # committer="jonathanbaraldi",
+            # author="jonathanbaraldi",
+            sha = repo.get_contents(filename, ref=commit.sha).sha, 
+            branch = 'chatgpt'
+        )
+
+
 
 
         # update
-        repo.update_file(filename, f"ChatGPT's response about `{file.filename}`:\n {response['choices'][0]['text']}", content, file.sha)
+        # repo.update_file(filename, comment, content, commit.sha , branch='chatgpt')
+
+
+
+
+        #repo.update_file(contents.path, message, content, contents.sha, branch=branch, author=author)  # Add, commit and push branch
         # repo.update_file(filename, "Adding comments to the code, by Jon", modified_content, file.sha)
 
         # repo.create_file(filename+".chatgpt", "Adding comments to the code, by Jon", modified_content, file.sha, "chagpt")
