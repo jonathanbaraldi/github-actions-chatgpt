@@ -50,10 +50,6 @@ for commit in commits:
 
         content = repo.get_contents(filename, ref=commit.sha).decoded_content.decode("utf-8")
 
-        content2 = repo.get_contents(filename, ref=commit.sha).decoded_content
-
-
-
         # content = repo.get_file_contents(filename)
 
         print(content)
@@ -63,7 +59,7 @@ for commit in commits:
         # Comments about the code
         response_comment = openai.Completion.create(
             engine=args.openai_engine,
-            prompt=("Can you please add some comments to the following code? "+content),
+            prompt=("Você pode por favor adicionar os commentários para o seguinte código? "+content),
             temperature=float(args.openai_temperature),
             max_tokens=int(args.openai_max_tokens)
         )
@@ -72,7 +68,7 @@ for commit in commits:
         # Improve the code about security and best practices
         response_security_standards = openai.Completion.create(
             engine=args.openai_engine,
-            prompt=("Improved and evolve the following code using security and best practices: "+content),
+            prompt=("Melhorar e evoluir o código a seguir usando segurança e melhores práticas: "+content),
             temperature=float(args.openai_temperature),
             max_tokens=int(args.openai_max_tokens)
         )
