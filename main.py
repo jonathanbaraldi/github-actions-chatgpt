@@ -41,34 +41,19 @@ pull_request = repo.get_pull(int(args.github_pr_id))
 
 
 
-
-
-
-
-
-
 ## Loop through the commits in the pull request
 commits = pull_request.get_commits()
 
 
-
-
-
-
 for commit in commits:
     
-
-
     print(commit.sha)
-
 
 
     # Getting the modified files in the commit
     files = commit.files
 
     
-
-
     for file in files:
 
         # Getting the file name and content
@@ -78,13 +63,8 @@ for commit in commits:
 
         content2 = repo.get_contents(filename, ref=commit.sha).decoded_content
 
-
-
         # content = repo.get_file_contents(filename)
-
         print(content)
-
-
 
         # Sending the code to ChatGPT
         response1 = openai.Completion.create(
@@ -100,6 +80,8 @@ for commit in commits:
             temperature=float(args.openai_temperature),
             max_tokens=int(args.openai_max_tokens)
         )
+
+
 
         # Adding a comment to the pull request with ChatGPT's response
         pull_request.create_issue_comment(f"ChatGPT's comments about `{file.filename}`:\n {response1['choices'][0]['text']}")
