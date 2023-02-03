@@ -93,6 +93,7 @@ for commit in commits:
 
         print(comment)
         print(filename)
+        
         print(file.sha)   
         print(commit.sha)
 
@@ -106,7 +107,7 @@ for commit in commits:
             content = repo.get_contents(filename, ref=commit.sha).decoded_content.decode("utf-8"), 
             # committer="jonathanbaraldi",
             # author="jonathanbaraldi",
-            sha = repo.get_contents(filename, ref=commit.sha).sha, 
+            sha = sha, 
             branch = 'chatgpt'
         )
 
