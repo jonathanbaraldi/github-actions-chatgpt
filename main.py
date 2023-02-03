@@ -40,8 +40,19 @@ repo = g.get_repo(os.getenv('GITHUB_REPOSITORY'))
 pull_request = repo.get_pull(int(args.github_pr_id))
 
 
+
+
+
+
+
+
+
 ## Loop through the commits in the pull request
 commits = pull_request.get_commits()
+
+
+
+
 
 
 for commit in commits:
@@ -76,41 +87,40 @@ for commit in commits:
 
 
         # Sending the code to ChatGPT
-        response = openai.Completion.create(
+        response1 = openai.Completion.create(
             engine=args.openai_engine,
-            prompt=(f"Can you please add some comments to the following code if there no one? \n```{content}```"),
+            prompt=("Can you please add some comments to the following code?"+content),
             temperature=float(args.openai_temperature),
             max_tokens=int(args.openai_max_tokens)
         )
 
-
-        # Adding a comment to the pull request with ChatGPT's response
-        # pull_request.create_issue_comment(f"ChatGPT's response about `{file.filename}`:\n {response['choices'][0]['text']}")
-
-
-        # Add the comment to the file
-        comment = response['choices'][0]['text']
-
-        print(comment)
-        print(filename)
-        
-        print(file.sha)   
-        print(commit.sha)
-
-        sha = repo.get_contents(filename, ref='chatgpt').sha
-        
-        print(sha)
-
-        repo.update_file(
-            path = filename, 
-            message = comment, 
-            content = repo.get_contents(filename, ref=commit.sha).decoded_content.decode("utf-8"), 
-            # committer="jonathanbaraldi",
-            # author="jonathanbaraldi",
-            sha = sha, 
-            branch = 'chatgpt'
+        response2 = openai.Completion.create(
+            engine=args.openai_engine,
+            prompt=("What can be improved in the following code about security and best practices?"+content),
+            temperature=float(args.openai_temperature),
+            max_tokens=int(args.openai_max_tokens)
         )
 
+        # Adding a comment to the pull request with ChatGPT's response
+        pull_request.create_issue_comment(f"ChatGPT's comments about `{file.filename}`:\n {response1['choices'][0]['text']}")
 
+        pull_request.create_issue_comment(f"ChatGPT's security e best practices about `{file.filename}`:\n {response2['choices'][0]['text']}")
 
-
+        # Add the comment to the file
+        
+        #comment = response['choices'][0]['text']
+        #print(comment)
+        #print(filename)
+        #print(file.sha)   
+        #print(commit.sha)
+        #sha = repo.get_contents(filename, ref='chatgpt').sha
+        #print(sha)
+        #repo.update_file(
+        #    path = filename, 
+        #    message = comment, 
+        #    content = repo.get_contents(filename, ref=commit.sha).decoded_content.decode("utf-8"), 
+        #    # committer="jonathanbaraldi",
+        #    # author="jonathanbaraldi",
+        #    sha = sha, 
+        #    branch = 'chatgpt'
+        #)
