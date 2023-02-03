@@ -7,8 +7,6 @@ import openai
 import os
 from github import Github
 
-import git 
-
 # pip3 install GitPython
 
 import base64
